@@ -46,7 +46,7 @@ def build_database():
     return [register_plugin(p) for p in plugins.get_plugins()]
 
 def print_welcome(welcome):
-    print(welcome)
+    print("\033[4m" + welcome + "\033[0m")
 
 def print_search_results(results):
     print("\033[4mHere is the the list of feeds that matches your query:\033[0m")
@@ -155,7 +155,8 @@ def main():
             old_entries = hist["subscribed_feeds"][name]["old_entries"]
             plugin_data = hist["subscribed_feeds"][name]["data"]
             try:
-                print_welcome("\033[4m" + feed.welcomeMessage(plugin_data) + "\033[0m")
+                feed.prepare(plugin_data)
+                print_welcome(feed.__plugin_welcome__)
                 ret = feed.fetchNewEntries(last_fetch_date)
                 for entry in ret: entry["origin"] = name
                 ret.extend(old_entries)
