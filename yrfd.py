@@ -127,7 +127,8 @@ def main():
 
     elif args.update_plugins:
         for cmd in [("git", "checkout", "yourfeeds-plugins"),
-                    ("git", "pull", "origin", "yourfeeds-plugins")]:
+                    ("git", "pull", "origin", "yourfeeds-plugins"),
+                    ("git", "checkout", "master")]:
             if subprocess.call(cmd):
                 break
 
