@@ -144,7 +144,7 @@ def main():
         for cmd in [("git", "checkout", "master"),
                     ("git", "pull", "origin", "master")]:
             if subprocess.call(cmd, cwd=YRFD_PATH):
-                bre
+                break
     else:
         results = []
         for name in hist["subscribed_feeds"]:
