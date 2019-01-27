@@ -93,10 +93,10 @@ def banner():
 def main():
     print("\033[1m\033[36m%s\033[0m" % banner())
     parser = argparse.ArgumentParser()
-    parser.add_argument("-s", "--search")
-    parser.add_argument("-d", "--unsubscribe", action="store_true")
-    parser.add_argument("-u", "--update-plugins", action="store_true")
-    parser.add_argument("-U", "--update-all", action="store_true")
+    parser.add_argument("-s", "--search", help="Search a feed in our database")
+    parser.add_argument("-d", "--unsubscribe", action="store_true", help="Unsubscribe to a feed")
+    parser.add_argument("-u", "--update-plugins", action="store_true", help="Search for new plugins(feeds) in remote repository")
+    parser.add_argument("-U", "--update-all", action="store_true", help="Update both executable and plugins database from remote repository")
 
     args = parser.parse_args()
 
@@ -123,8 +123,11 @@ def main():
         tmp = list(hist["subscribed_feeds"])
         for i, name in enumerate(tmp):
             print("\033[93m%s\033[0m." % i, name)
-        choice = int(input("Enter feed number to unsubscribe: "))
-        del hist["subscribed_feeds"][tmp[choice]]
+        if tmp:
+            choice = int(input("Enter feed number to unsubscribe: "))
+            del hist["subscribed_feeds"][tmp[choice]]
+        else:
+            print("No subscribed feed")
 
     elif args.update_plugins:
         print("\033[32m\033[1mFetching new plugins from remote repository...\033[0m")
@@ -166,7 +169,8 @@ def main():
             entry = results[choice]
             open_url(results[choice]["url"])
             hist["subscribed_feeds"][entry["origin"]]["old_entries"].remove(entry)
-
+        else:
+            print("No subscribed feed, start by searching in the plugin database with 'yrfd -s string'")
     save_hist(hist)
 
 if __name__ == "__main__":
