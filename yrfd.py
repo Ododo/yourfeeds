@@ -4,6 +4,7 @@ import sys
 import subprocess
 import argparse
 import traceback
+import virtualenv
 
 from os import getenv, path, mkdir
 from os import name as osname
@@ -25,8 +26,14 @@ PLUGINS_ATTRS = ("__plugin_name__", "__plugin_author__", "__plugin_version__",
                 "fetchNewEntries", "subscribed")
 
 YRFD_PATH = path.join(path.expanduser("~"), ".yourfeeds/")
+VENV_PATH = path.join(YRFD_PATH, ".venv")
 PLUGINS_PATH = path.join(YRFD_PATH, "plugins")
 HISTORY_PATH = path.join(YRFD_PATH, "yrfd.json")
+
+if not path.exists(VENV_PATH):
+    virtualenv.create_environment(VENV_PATH)
+
+exec(open(path.join(VENV_PATH, "bin", "activate_this.py")).read())
 
 if not path.exists(YRFD_PATH):
     mkdir(YRFD_PATH)
@@ -106,7 +113,7 @@ def fetch_plugin_dependencies(dependencies):
     print(dependencies)
     for r in dependencies:
         if subprocess.call((sys.executable, "-m", "pip", "show", r)) and \
-           subprocess.call((sys.executable, "-m", "pip", "install", r)):
+           subprocess.call((sys.executable, "-m", "pip", "install", "--prefix", VENV_PATH, r)):
                raise Exception("Failed to retreive dependencies")
 
 def banner():
