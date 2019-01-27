@@ -18,7 +18,8 @@ import plugins
 
 PLUGIN_ATTRS = ("__plugin_name__", "__plugin_author__", "__plugin_version__", 
                 "__plugin_description__", "__plugin_sources__", "__plugin_keywords__",
-                "__plugin_welcome__", "fetchNewEntries", "prepare")
+                "__plugin_welcome__", "__plugin_dependencies__",
+                "fetchNewEntries", "subscribed")
 
 YRFD_PATH = path.join(path.expanduser("~"), ".yourfeeds/")
 HISTORY_PATH = path.join(YRFD_PATH, "yrfd.json")
@@ -85,6 +86,14 @@ def open_url(url):
     elif osname == 'posix':
         subprocess.call(('xdg-open', url))
 
+def fetch_plugin_dependencies(dependencies):
+    print("\033[32m\033[1mFetching plugin dependencies...\033[0m")
+    print(dependencies)
+    for r in dependencies:
+        if subprocess.call((sys.executable, "-m", "pip", "show", r)) and\
+           subprocess.call((sys.executable, "-m", "pip", "install", r)):
+               raise Exception("Failed to retreive dependencies")
+
 def banner():
     return """╦ ╦┌─┐┬ ┬┬─┐╔═╗┌─┐┌─┐┌┬┐┌─┐
 ╚╦╝│ ││ │├┬┘╠╣ ├┤ ├┤  ││└─┐
@@ -118,6 +127,8 @@ def main():
                                               "old_entries" : [],
                                               "data" : {},
                                             }
+            fetch_plugin_dependencies(feeds[name].__plugin_dependencies__)
+            feeds[name].subscribed(hist["subscribed_feeds"][name]["data"])
         else:
             print("Already subscribed to that feed")
 
@@ -141,23 +152,14 @@ def main():
                     "--no-commit", "yourfeeds-plugins", "--allow-unrelated-histories")]:
             if subprocess.call(cmd, cwd=YRFD_PATH):
                 break
-
-    elif args.update_all:
-        print("\033[32m\033[1mUpdating YourFeeds from remote repository...\033[0m")
-        for cmd in [("git", "checkout", "master"),
-                    ("git", "pull", "origin", "master")]:
-            if subprocess.call(cmd, cwd=YRFD_PATH):
-                break
     else:
         results = []
         for name in hist["subscribed_feeds"]:
             feed = feeds[name]
             last_fetch_date = hist["subscribed_feeds"][name]["last_fetch"]
             old_entries = hist["subscribed_feeds"][name]["old_entries"]
-            plugin_data = hist["subscribed_feeds"][name]["data"]
             try:
                 print_welcome(feed.__plugin_welcome__)
-                feed.prepare(plugin_data)
                 ret = feed.fetchNewEntries(last_fetch_date)
                 for entry in ret: entry["origin"] = name
                 ret.extend(old_entries)
