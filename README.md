@@ -8,6 +8,8 @@ The idea is that everybody can contribute to the plugin database if they respect
 
 You can of course, have your own plugins and plugins repository
 
+[![asciicast](https://asciinema.org/a/41bslOc4JFmamIytm3l19C3O7.svg)](https://asciinema.org/a/41bslOc4JFmamIytm3l19C3O7)
+
 # Install
 
     $ git clone https://github.com/Ododo/yourfeeds.git --branch master --single-branch
