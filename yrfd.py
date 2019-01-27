@@ -93,7 +93,9 @@ def main():
     print("\033[1m\033[36m%s\033[0m" % banner())
     parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--search")
-    parser.add_argument("-u", "--unsubscribe", action="store_true")
+    parser.add_argument("-d", "--unsubscribe", action="store_true")
+    parser.add_argument("-u", "--update-plugins", action="store_true")
+    parser.add_argument("-U", "--update-all", action="store_true")
 
     args = parser.parse_args()
 
@@ -122,6 +124,12 @@ def main():
             print("\033[93m%s\033[0m." % i, name)
         choice = int(input("Enter feed number to unsubscribe: "))
         del hist["subscribed_feeds"][tmp[choice]]
+
+    elif args.update_plugins:
+        for cmd in [("git", "checkout", "yourfeeds-plugins"),
+                    ("git", "pull", "origin", "yourfeeds-plugins")]:
+            if subprocess.call(cmd):
+                break
 
     else:
         results = []
