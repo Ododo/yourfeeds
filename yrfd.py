@@ -20,7 +20,7 @@ PLUGIN_ATTRS = ("__plugin_name__", "__plugin_author__", "__plugin_version__",
                 "__plugin_description__", "__plugin_sources__", "__plugin_keywords__", 
                 "fetchNewEntries")
 
-YRFD_PATH = path.join(getenv("HOME"), ".yourfeeds/")
+YRFD_PATH = path.join(path.expanduser("~"), ".yourfeeds/")
 HISTORY_PATH = path.join(YRFD_PATH, "yrfd.json")
 
 feeds = {}
