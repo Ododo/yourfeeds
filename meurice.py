@@ -12,13 +12,13 @@ Récupère les derniers Meurice sur la chaine youtube de france inter
 __plugin_keywords__ = {"guillaume", "meurice", "france", "inter"}
 __plugin_sources__ = {"youtube.com", }
 
-API_KEY=""
+API_KEY=None
 
 
-def welcomeMessage():
-    if not API_KEY:
-        print("Please specify API_KEY (youtube) in plugins/meurice.py to use this plugin")
-        return
+def welcomeMessage(data):
+    if not "API_KEY" in data:
+        data["API_KEY"] = input("Please specify Youtube API_KEY to use this plugin: ")
+    API_KEY = data["API_KEY"]
     return "Les dernières chroniques de Guillaume Meurice !"
 
 def fetchNewEntries(last_fetch_date):
