@@ -198,7 +198,8 @@ def main():
             entry = results[choice]
             open_url(results[choice]["url"])
             hist["subscribed_feeds"][entry["origin"]]["old_entries"].remove(entry)
-        else:
+
+        elif not hist["subscribed_feeds"]:
             print("No subscribed feed, start by searching in the plugin database with 'yrfd -s string'")
     save_hist(hist)
 

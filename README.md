@@ -54,13 +54,17 @@ def subscribed(data):
     Called when the user just subscribed to your feed
     data is a dict object that you can use to store plugin data.
     """
-    # Import all the custom dependencies once the user has activated your plugin
-    for r in __plugin_dependencies__:
-        globals()[r] = __import__(r)
-    
-def fetchNewEntries(last_fetch_date):
+    pass
+
+def fetchNewEntries(data, custom_deps, last_fetch_date):
     """
     Called each time the user wants to fetch new entries from your plugin.
+    
+    data is the same object that in subscribed function.
+    
+    custom_deps is a dict. in which is stored all your imported custom dependencies
+    from __plugin_dependencies__.
+    
     last_fetch_date is a string in isoformat (UTC), representing the last time
     the user has executed this function. see https://docs.python.org/3/library/datetime.html#datetime.date.fromisoformat
     You may want to select entries whose date is > last_fech_date.
