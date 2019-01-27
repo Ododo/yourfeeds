@@ -115,7 +115,9 @@ def main():
         name = results[choice].__plugin_name__
         if name not in hist["subscribed_feeds"]:
             hist["subscribed_feeds"][name] = {"last_fetch" : get_date(), 
-                                              "old_entries" : []}
+                                              "old_entries" : [],
+                                              "data" : {},
+                                            }
         else:
             print("Already subscribed to that feed")
 
@@ -151,8 +153,9 @@ def main():
             feed = feeds[name]
             last_fetch_date = hist["subscribed_feeds"][name]["last_fetch"]
             old_entries = hist["subscribed_feeds"][name]["old_entries"]
+            plugin_data = hist["subscribed_feeds"][name]["data"]
             try:
-                print_welcome("\033[4m" + feed.welcomeMessage() + "\033[0m")
+                print_welcome("\033[4m" + feed.welcomeMessage(plugin_data) + "\033[0m")
                 ret = feed.fetchNewEntries(last_fetch_date)
                 for entry in ret: entry["origin"] = name
                 ret.extend(old_entries)
