@@ -96,7 +96,7 @@ def main():
     parser.add_argument("-s", "--search", help="Search a feed in our database")
     parser.add_argument("-d", "--unsubscribe", action="store_true", help="Unsubscribe to a feed")
     parser.add_argument("-u", "--update-plugins", action="store_true", help="Search for new plugins(feeds) in remote repository")
-    parser.add_argument("-U", "--update-all", action="store_true", help="Update both executable and plugins database from remote repository")
+    parser.add_argument("-U", "--update-all", action="store_true", help="Update executable from remote repository")
 
     args = parser.parse_args()
 
