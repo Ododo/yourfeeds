@@ -1,6 +1,6 @@
 # Yourfeeds
 
-Yourfeeds allows you to pull new entries from feeds that you choose.
+Yourfeeds (yrfd) allows you to pull new entries from feeds that you choose.
 
 Feeds are programmatically defined in the branch yourfeeds-plugins of this repository.
 
@@ -71,3 +71,16 @@ def fetchNewEntries(last_fetch_date):
             "date" : last_fetch_date #the date of the entry in isoformat UTC (same format as last_fetch_date)
         }]
 ```
+
+# Contributing
+
+For contributing to the plugin database simply make a pull request on the *yourstream-plugins* branch once
+you have written your plugin under the *plugins* folder.
+
+For contributing to the yrfd core code make a pull request on the *master* branch.
+
+
+# Data
+
+yrfd stores plugins, python virtualenv and a json database in the *~/.yourfeeds* folder
+
