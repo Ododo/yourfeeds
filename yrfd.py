@@ -20,7 +20,8 @@ PLUGIN_ATTRS = ("__plugin_name__", "__plugin_author__", "__plugin_version__",
                 "__plugin_description__", "__plugin_sources__", "__plugin_keywords__", 
                 "fetchNewEntries")
 
-HISTORY_PATH = path.join(getenv("HOME"), ".ystr.json")
+YRFD_PATH = path.join(getenv("HOME"), ".yourfeeds/")
+HISTORY_PATH = path.join(YRFD_PATH, "yrfd.json")
 
 feeds = {}
 
@@ -126,12 +127,19 @@ def main():
         del hist["subscribed_feeds"][tmp[choice]]
 
     elif args.update_plugins:
+        print("\033[32m\033[1mFetching new plugins from remote repository...\033[0m")
         for cmd in [("git", "checkout", "yourfeeds-plugins"),
                     ("git", "pull", "origin", "yourfeeds-plugins"),
                     ("git", "checkout", "master")]:
-            if subprocess.call(cmd):
+            if subprocess.call(cmd, cwd=YRFD_PATH):
                 break
 
+    elif args.update_all:
+        print("\033[32m\033[1mUpdating YourFeeds from remote repository...\033[0m")
+        for cmd in [("git", "checkout", "master"),
+                    ("git", "pull", "origin", "master")]:
+            if subprocess.call(cmd, cwd=YRFD_PATH):
+                break
     else:
         results = []
         for name in hist["subscribed_feeds"]:
