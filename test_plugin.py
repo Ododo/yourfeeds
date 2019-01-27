@@ -13,10 +13,9 @@ __plugin_sources__ = {"example.com", }
 
 
 def subscribed(data):
-    for r in __plugin_dependencies__:
-        globals()[r] = __import__(r)
+    print("Thank you for subscribing to " + __plugin_name__)
 
-def fetchNewEntries(last_fetch_date):
+def fetchNewEntries(data, custom_deps, last_fetch_date):
     return [{
             "url" : "http://example.com",
             "description": "Sample entry",

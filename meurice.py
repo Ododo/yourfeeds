@@ -14,7 +14,6 @@ __plugin_dependencies__ = {}
 __plugin_keywords__ = {"guillaume", "meurice", "france", "inter"}
 __plugin_sources__ = {"youtube.com", }
 
-API_KEY=None
 
 
 def subscribed(data):
@@ -22,7 +21,8 @@ def subscribed(data):
         data["API_KEY"] = input("Please specify Youtube API_KEY to use plugin: ")
     API_KEY = data["API_KEY"]
 
-def fetchNewEntries(last_fetch_date):
+def fetchNewEntries(data, deps, last_fetch_date):
+    API_KEY = data["API_KEY"]
     last_fetch_date = datetime.fromisoformat(last_fetch_date) #utc
     r = requests.get("https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=le moment meurice&key=%s" % API_KEY)
     data = r.json()["items"]
