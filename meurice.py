@@ -5,6 +5,7 @@ from datetime import datetime
 __plugin_author__ = "Olivier D."
 __plugin_name__ = "Guillaume Meurice sur France Inter"
 __plugin_version__ = 1
+__plugin_welcome__ = "Les dernières chroniques de Guillaume Meurice !"
 __plugin_description__ = """
 Récupère les derniers Meurice sur la chaine youtube de france inter
 """
@@ -15,11 +16,10 @@ __plugin_sources__ = {"youtube.com", }
 API_KEY=None
 
 
-def welcomeMessage(data):
+def prepare(data):
     if not "API_KEY" in data:
-        data["API_KEY"] = input("Please specify Youtube API_KEY to use this plugin: ")
+        data["API_KEY"] = input("Please specify Youtube API_KEY to use plugin: ")
     API_KEY = data["API_KEY"]
-    return "Les dernières chroniques de Guillaume Meurice !"
 
 def fetchNewEntries(last_fetch_date):
     last_fetch_date = datetime.fromisoformat(last_fetch_date) #utc
