@@ -80,7 +80,7 @@ def fetchNewEntries(data, custom_deps, last_fetch_date):
 
 # Contributing
 
-For contributing to the plugin database simply make a pull request on the *yourstream-plugins* branch once
+For contributing to the plugin database simply make a pull request on the *yourfeeds-plugins* branch once
 you have written your plugin under the *plugins* folder.
 
 For contributing to the yrfd core code make a pull request on the *master* branch.
