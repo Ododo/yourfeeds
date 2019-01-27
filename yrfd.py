@@ -133,7 +133,9 @@ def main():
         print("\033[32m\033[1mFetching new plugins from remote repository...\033[0m")
         for cmd in [("git", "checkout", "yourfeeds-plugins"),
                     ("git", "pull", "origin", "yourfeeds-plugins"),
-                    ("git", "checkout", "master")]:
+                    ("git", "checkout", "master"),
+                    ("git", "merge","--squash", "-s", "subtree", 
+                    "--no-commit", "yourfeeds-plugins", "--allow-unrelated-histories")]:
             if subprocess.call(cmd, cwd=YRFD_PATH):
                 break
 
@@ -142,7 +144,7 @@ def main():
         for cmd in [("git", "checkout", "master"),
                     ("git", "pull", "origin", "master")]:
             if subprocess.call(cmd, cwd=YRFD_PATH):
-                break
+                bre
     else:
         results = []
         for name in hist["subscribed_feeds"]:
