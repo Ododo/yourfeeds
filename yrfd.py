@@ -136,7 +136,7 @@ def main():
         for cmd in [("git", "checkout", "yourfeeds-plugins"),
                     ("git", "pull", "origin", "yourfeeds-plugins"),
                     ("git", "checkout", "master"),
-                    ("git stash"),
+                    ("git", "stash"),
                     ("git", "merge","--squash", "-s", "subtree", 
                     "--no-commit", "yourfeeds-plugins", "--allow-unrelated-histories")]:
             if subprocess.call(cmd, cwd=YRFD_PATH):
