@@ -10,13 +10,14 @@ __plugin_description__ = """
 Récupère les derniers Meurice sur la chaine youtube de france inter
 """
 
+__plugin_dependencies__ = {}
 __plugin_keywords__ = {"guillaume", "meurice", "france", "inter"}
 __plugin_sources__ = {"youtube.com", }
 
 API_KEY=None
 
 
-def prepare(data):
+def subscribed(data):
     if not "API_KEY" in data:
         data["API_KEY"] = input("Please specify Youtube API_KEY to use plugin: ")
     API_KEY = data["API_KEY"]
