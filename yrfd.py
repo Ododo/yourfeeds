@@ -5,7 +5,7 @@ import subprocess
 import argparse
 import traceback
 
-from os import getenv, path
+from os import getenv, path, mkdir
 from os import name as osname
 from datetime import datetime, timezone
 
@@ -16,13 +16,28 @@ import requests
 import plugins
 
 
-PLUGIN_ATTRS = ("__plugin_name__", "__plugin_author__", "__plugin_version__", 
+PLUGINS_REMOTE_REPO = "https://github.com/Ododo/yourfeeds.git"
+PLUGINS_REMOTE_BRANCH = "yourfeeds-plugins"
+
+PLUGINS_ATTRS = ("__plugin_name__", "__plugin_author__", "__plugin_version__", 
                 "__plugin_description__", "__plugin_sources__", "__plugin_keywords__",
                 "__plugin_welcome__", "__plugin_dependencies__",
                 "fetchNewEntries", "subscribed")
 
 YRFD_PATH = path.join(path.expanduser("~"), ".yourfeeds/")
+PLUGINS_PATH = path.join(YRFD_PATH, "plugins")
 HISTORY_PATH = path.join(YRFD_PATH, "yrfd.json")
+
+if not path.exists(YRFD_PATH):
+    mkdir(YRFD_PATH)
+
+if not path.exists(PLUGINS_PATH):
+    mkdir(PLUGINS_PATH)
+
+if not path.exists(path.join(PLUGINS_PATH, ".git")):
+    subprocess.call(('git', 'clone', PLUGINS_REMOTE_REPO, 
+                     "--branch", PLUGINS_REMOTE_BRANCH, 
+                     "--single-branch", PLUGINS_PATH))
 
 feeds = {}
 
@@ -36,7 +51,7 @@ def make_json(o):
     return json.JSONEncoder.default(obj)
 
 def register_plugin(module):
-    assert(all(e in module.__dict__ for e in PLUGIN_ATTRS))
+    assert(all(e in module.__dict__ for e in PLUGINS_ATTRS))
     assert(all(e.islower() for e in module.__plugin_keywords__))
     feeds[module.__plugin_name__] = module
 
@@ -90,7 +105,7 @@ def fetch_plugin_dependencies(dependencies):
     print("\033[32m\033[1mFetching plugin dependencies...\033[0m")
     print(dependencies)
     for r in dependencies:
-        if subprocess.call((sys.executable, "-m", "pip", "show", r)) and\
+        if subprocess.call((sys.executable, "-m", "pip", "show", r)) and \
            subprocess.call((sys.executable, "-m", "pip", "install", r)):
                raise Exception("Failed to retreive dependencies")
 
@@ -144,14 +159,8 @@ def main():
 
     elif args.update_plugins:
         print("\033[32m\033[1mFetching new plugins from remote repository...\033[0m")
-        for cmd in [("git", "checkout", "yourfeeds-plugins"),
-                    ("git", "pull", "origin", "yourfeeds-plugins"),
-                    ("git", "checkout", "master"),
-                    ("git", "stash"),
-                    ("git", "merge","--squash", "-s", "subtree", 
-                    "--no-commit", "yourfeeds-plugins", "--allow-unrelated-histories")]:
-            if subprocess.call(cmd, cwd=YRFD_PATH):
-                break
+        subprocess.call(("git", "pull"), cwd=PLUGINS_PATH)
+
     else:
         results = []
         for name in hist["subscribed_feeds"]:

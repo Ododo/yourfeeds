@@ -2,9 +2,9 @@ import pkgutil
 import importlib
 from os import path
 
-from yrfd import YRFD_PATH
+from yrfd import PLUGINS_PATH
 
-__path__ = [path.join(YRFD_PATH, 'plugins')]
+__path__ = [PLUGINS_PATH]
 
 def get_plugins():
     for importer, modname, ispkg in pkgutil.walk_packages(path=__path__, prefix='plugins.'):
