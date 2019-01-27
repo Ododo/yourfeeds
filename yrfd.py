@@ -17,8 +17,8 @@ import plugins
 
 
 PLUGIN_ATTRS = ("__plugin_name__", "__plugin_author__", "__plugin_version__", 
-                "__plugin_description__", "__plugin_sources__", "__plugin_keywords__", 
-                "fetchNewEntries")
+                "__plugin_description__", "__plugin_sources__", "__plugin_keywords__",
+                "__plugin_welcome__", "fetchNewEntries", "prepare")
 
 YRFD_PATH = path.join(path.expanduser("~"), ".yourfeeds/")
 HISTORY_PATH = path.join(YRFD_PATH, "yrfd.json")
@@ -155,8 +155,8 @@ def main():
             old_entries = hist["subscribed_feeds"][name]["old_entries"]
             plugin_data = hist["subscribed_feeds"][name]["data"]
             try:
-                feed.prepare(plugin_data)
                 print_welcome(feed.__plugin_welcome__)
+                feed.prepare(plugin_data)
                 ret = feed.fetchNewEntries(last_fetch_date)
                 for entry in ret: entry["origin"] = name
                 ret.extend(old_entries)
