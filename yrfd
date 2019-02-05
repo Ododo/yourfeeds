@@ -150,6 +150,7 @@ def main():
             hist["subscribed_feeds"][name] = {"last_fetch" : get_date(), 
                                               "old_entries" : [],
                                               "data" : {},
+                                              "exclude": [],
                                             }
             fetch_plugin_dependencies(feeds[name].__plugin_dependencies__)
             feeds[name].subscribed(hist["subscribed_feeds"][name]["data"])
@@ -176,21 +177,31 @@ def main():
             feed = feeds[name]
             last_fetch_date = hist["subscribed_feeds"][name]["last_fetch"]
             old_entries = hist["subscribed_feeds"][name]["old_entries"]
+            exclude = hist["subscribed_feeds"][name]["exclude"]
             try:
                 print_welcome(feed.__plugin_welcome__)
                 ret = feed.fetchNewEntries(hist["subscribed_feeds"][name]["data"],
                                            get_custom_dependencies(feed), 
                                            last_fetch_date)
-                for entry in ret: entry["origin"] = name
+                for entry in ret[:]: 
+                    if entry["description"] not in exclude:
+                        if "exclude_next" in entry and entry["exclude_next"] is True:
+                            exclude.append(entry["description"])
+                        entry["origin"] = name
+                    else:
+                        ret.remove(entry)
+
                 ret.extend(old_entries)
                 ret.sort(key = lambda x:datetime.fromisoformat(x["date"]), reverse=True)
                 print_feed_results(ret, len(results))
                 results.extend(ret)
+
                 hist["subscribed_feeds"][name]["last_fetch"] = get_date()
                 hist["subscribed_feeds"][name]["old_entries"] = ret
+
             except Exception as err:
                 print("Feed \033[1m%s\033[0m failed to retreive new items, reason is :" % name)
-                traceback.print_tb(err.__traceback__)
+                print(traceback.format_exc())
                 continue
 
         if results:
