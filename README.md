@@ -75,6 +75,7 @@ def fetchNewEntries(data, custom_deps, last_fetch_date):
             "url" : "http://example.com", #the url of the entry
             "description": "Sample entry",
             "date" : last_fetch_date #the date of the entry in isoformat UTC (same format as last_fetch_date)
+            "exclude_next" : False #Exclude this entry in the future
         }]
 ```
 
