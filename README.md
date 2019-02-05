@@ -8,6 +8,8 @@ The idea is that everybody can contribute to the plugin database if they respect
 
 You can of course, have your own plugins and plugins repository
 
+[![asciicast](https://asciinema.org/a/41bslOc4JFmamIytm3l19C3O7.svg)](https://asciinema.org/a/41bslOc4JFmamIytm3l19C3O7)
+
 # Install
 
     $ git clone https://github.com/Ododo/yourfeeds.git --branch master --single-branch
@@ -78,7 +80,7 @@ def fetchNewEntries(data, custom_deps, last_fetch_date):
 
 # Contributing
 
-For contributing to the plugin database simply make a pull request on the *yourstream-plugins* branch once
+For contributing to the plugin database simply make a pull request on the *yourfeeds-plugins* branch once
 you have written your plugin under the *plugins* folder.
 
 For contributing to the yrfd core code make a pull request on the *master* branch.
